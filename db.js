@@ -1,5 +1,5 @@
 const { mongoose} = require("mongoose");
-mongoose.connect("mongodb+srv://admin:admin%4012345&@cluster0.kvegecq.mongodb.net/backend_app_course_sell")
+
 const Schema = mongoose.Schema;
 const ObjectId = mongoose.Types.ObjectId;
 
