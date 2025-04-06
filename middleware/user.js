@@ -1,12 +1,13 @@
 
 require('dotenv').config();
+const jwt = require("jsonwebtoken");
 const jwtUserSecret = process.env.JWT_USER_PASSOWRD;
 
 
 
 function userMiddleware(req,res,next){
     const token = req.headers.token;
-    const decoded = JsonWebTokenError.verify(token,jwtUserSecret)
+    const decoded = jwt.verify(token,jwtUserSecret)
 
     if(decoded){
         req.userId = decoded.id;

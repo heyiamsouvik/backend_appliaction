@@ -3,8 +3,8 @@ const adminRouter = Router();
 const {adminModel, courseModel} = require("../db");
 const jwt = require("jsonwebtoken");
 require('dotenv').config();
-const jwtAdminSecret = process.env.JWT_ADMIN_PASSOWRD;
-
+const jwtAdminSecret = process.env.JWT_ADMIN_PASSWORD;
+const {adminMiddleware} = require("../middleware/admin")
 
 
 
@@ -15,7 +15,7 @@ adminRouter.post('/signup',async function(req, res) {
 
 
     if (!adminModel) {
-      throw new Error("userModel is undefined");
+      throw new Error("AdminModel is undefined");
     }
 
     await adminModel.create({ email, password, firstname, lastname });
@@ -69,15 +69,32 @@ adminRouter.post('/signup',async function(req, res) {
     })
   })
   
-  adminRouter.put('/course', function(req, res) {
+  adminRouter.put('/course',adminMiddleware, async function(req, res) {
+    
+    const adminId = req.userId;
+
+    const{title, description, imageUrl, price, courseId}= req.body;
+    const course = await courseModel.updateOne({
+      _id: courseId,
+      creatorId: adminId
+    },{
+      title, description, imageUrl, price, creatorId: adminId
+    })
     res.json({
-      // massage: "signin endpoint admin"
+      massage: "Course updated",
+      courseId: course._id
     })
   })
   
-  adminRouter.get('/course/bulk', function(req, res) {
+  adminRouter.get('/course/bulk',adminMiddleware, async function(req, res) {
+
+    const adminId =req.userId;
+    const courses = await courseModel.find({
+      creatorId:adminId
+    })
     res.json({
-      // massage: "signin endpoint admin"
+      massage: "all courses",
+      courses
     })
   })
   

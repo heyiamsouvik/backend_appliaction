@@ -1,12 +1,13 @@
 
 require('dotenv').config();
-const jwtAdminSecret = process.env.JWT_ADMIN_PASSOWRD;
+const jwt = require("jsonwebtoken");
+const jwtAdminSecret = process.env.JWT_ADMIN_PASSWORD;
 
 
 
 function adminMiddleware(req,res,next){
     const token = req.headers.token;
-    const decoded = JsonWebTokenError.verify(token,jwtAdminSecret)
+    const decoded = jwt.verify(token,jwtAdminSecret)
 
     if(decoded){
         req.userId = decoded.id;
